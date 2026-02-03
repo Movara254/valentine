@@ -3,35 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine</title>
+<title>Be My Valentine ❤️</title>
 <style>
   body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to bottom, #ffe6f2, #ffcccc);
+    background: #ffe6f2;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     flex-direction: column;
     text-align: center;
   }
+
+  /* Floating frames background */
+  .frame {
+    position: absolute;
+    border: 2px solid #ff66aa;
+    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+    animation: floatFrames linear infinite;
+    opacity: 0.6;
+  }
+  @keyframes floatFrames {
+    0% { transform: translateY(100vh) rotate(0deg);}
+    100% { transform: translateY(-100px) rotate(360deg);}
+  }
+
   h1 {
-    font-size: 2em;
+    font-size: 2.5em;
     margin-bottom: 30px;
     color: #d80073;
     text-shadow: 2px 2px #fff;
+    z-index: 10;
   }
+
   button {
     padding: 15px 30px;
-    font-size: 1.2em;
+    font-size: 1.3em;
     margin: 10px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.3s, background 0.3s;
+    z-index: 10;
   }
   button#yes {
     background-color: #ff4d94;
@@ -42,27 +60,43 @@
     color: #800040;
   }
   button#yes.grow {
-    transform: scale(1.5);
+    transform: scale(1.5) rotate(10deg);
   }
+
   .message {
-    font-size: 2em;
+    font-size: 1.8em;
     color: #d80073;
     margin-top: 20px;
     display: none;
     animation: fadeIn 2s forwards;
+    max-width: 80%;
+    line-height: 1.5;
+    z-index: 10;
   }
   @keyframes fadeIn {
     from {opacity: 0;}
     to {opacity: 1;}
   }
+
   .emoji {
     position: absolute;
-    font-size: 2em;
+    font-size: 1.5em;
     animation: fall linear forwards;
   }
   @keyframes fall {
-    0% {transform: translateY(-50px);}
-    100% {transform: translateY(100vh);}
+    0% { transform: translateY(-50px) rotate(0deg); }
+    100% { transform: translateY(110vh) rotate(360deg); }
+  }
+
+  .dollar {
+    position: absolute;
+    font-size: 2em;
+    color: green;
+    animation: dollarFall 2s linear forwards;
+  }
+  @keyframes dollarFall {
+    0% { top: -50px; transform: rotate(0deg); }
+    100% { top: 90vh; transform: rotate(720deg);}
   }
 </style>
 </head>
@@ -73,9 +107,13 @@
   <button id="yes">Yes</button>
   <button id="no">No</button>
 </div>
-<div class="message" id="loveMessage">I value you! I have to say this today! ❤️🌸</div>
+<div class="message" id="loveMessage">
+  I value you more than words can say! 💖🌹<br>
+  Your smile makes my world brighter, and I just had to tell you today! 🌸❤️💐<br>
+  I hope this brings a smile as big as the one you give me every day.
+</div>
 
-<!-- YouTube audio -->
+<!-- Music -->
 <iframe id="music" width="0" height="0" src="https://www.youtube.com/embed/1-VIDEO-ID?autoplay=1&loop=1&playlist=1-VIDEO-ID" frameborder="0" allow="autoplay"></iframe>
 
 <script>
@@ -84,33 +122,50 @@
   const message = document.getElementById('loveMessage');
   const body = document.body;
 
-  // No button behavior
+  // Generate floating background frames
+  for(let i=0; i<15; i++){
+    const frame = document.createElement('div');
+    frame.classList.add('frame');
+    frame.style.left = Math.random()*100 + 'vw';
+    frame.style.width = 30 + Math.random()*70 + 'px';
+    frame.style.height = frame.style.width;
+    frame.style.animationDuration = (5 + Math.random()*10) + 's';
+    body.appendChild(frame);
+  }
+
+  // No button: Yes grows and dollar falls
   noBtn.addEventListener('click', () => {
     yesBtn.classList.add('grow');
     setTimeout(() => yesBtn.classList.remove('grow'), 800);
+
+    const dollar = document.createElement('span');
+    dollar.classList.add('dollar');
+    dollar.innerText = '💵';
+    dollar.style.left = Math.random()*80 + 'vw';
+    body.appendChild(dollar);
+    setTimeout(()=> dollar.remove(), 2000);
   });
 
-  // Yes button behavior
+  // Yes button: show sweet message + endless emojis
   yesBtn.addEventListener('click', () => {
     message.style.display = 'block';
     createEmojis();
+    setInterval(createEmojis, 500); // endless emojis
   });
 
-  function createEmojis() {
-    const emojis = ['❤️','🌹','🌸','💖','💐'];
-    for(let i = 0; i < 50; i++){
-      const span = document.createElement('span');
-      span.classList.add('emoji');
-      span.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-      span.style.left = Math.random()*100 + 'vw';
-      span.style.animationDuration = (2 + Math.random()*3) + 's';
-      body.appendChild(span);
-      // Remove after falling
-      setTimeout(()=> span.remove(), 5000);
-    }
+  function createEmojis(){
+    const emojis = ['❤️','💖','💘','💝','💐','🌸','🌹','😍','🥰'];
+    const span = document.createElement('span');
+    span.classList.add('emoji');
+    span.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+    const size = Math.random()*2 + 1; // 1em to 3em
+    span.style.fontSize = size + 'em';
+    span.style.left = Math.random()*100 + 'vw';
+    span.style.animationDuration = (3 + Math.random()*4) + 's';
+    body.appendChild(span);
+    setTimeout(()=> span.remove(), 7000);
   }
 </script>
 
 </body>
 </html>
-
