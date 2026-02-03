@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom, #ffe6f2, #ffcccc);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    text-align: center;
+  }
+  h1 {
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #d80073;
+    text-shadow: 2px 2px #fff;
+  }
+  button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    margin: 10px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s;
+  }
+  button#yes {
+    background-color: #ff4d94;
+    color: white;
+  }
+  button#no {
+    background-color: #ffb3c6;
+    color: #800040;
+  }
+  button#yes.grow {
+    transform: scale(1.5);
+  }
+  .message {
+    font-size: 2em;
+    color: #d80073;
+    margin-top: 20px;
+    display: none;
+    animation: fadeIn 2s forwards;
+  }
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  .emoji {
+    position: absolute;
+    font-size: 2em;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    0% {transform: translateY(-50px);}
+    100% {transform: translateY(100vh);}
+  }
+</style>
+</head>
+<body>
+
+<h1>Will you be my Valentine?</h1>
+<div>
+  <button id="yes">Yes</button>
+  <button id="no">No</button>
+</div>
+<div class="message" id="loveMessage">I value you! I have to say this today! ❤️🌸</div>
+
+<!-- YouTube audio -->
+<iframe id="music" width="0" height="0" src="https://www.youtube.com/embed/1-VIDEO-ID?autoplay=1&loop=1&playlist=1-VIDEO-ID" frameborder="0" allow="autoplay"></iframe>
+
+<script>
+  const yesBtn = document.getElementById('yes');
+  const noBtn = document.getElementById('no');
+  const message = document.getElementById('loveMessage');
+  const body = document.body;
+
+  // No button behavior
+  noBtn.addEventListener('click', () => {
+    yesBtn.classList.add('grow');
+    setTimeout(() => yesBtn.classList.remove('grow'), 800);
+  });
+
+  // Yes button behavior
+  yesBtn.addEventListener('click', () => {
+    message.style.display = 'block';
+    createEmojis();
+  });
+
+  function createEmojis() {
+    const emojis = ['❤️','🌹','🌸','💖','💐'];
+    for(let i = 0; i < 50; i++){
+      const span = document.createElement('span');
+      span.classList.add('emoji');
+      span.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+      span.style.left = Math.random()*100 + 'vw';
+      span.style.animationDuration = (2 + Math.random()*3) + 's';
+      body.appendChild(span);
+      // Remove after falling
+      setTimeout(()=> span.remove(), 5000);
+    }
+  }
+</script>
+
+</body>
+</html>
